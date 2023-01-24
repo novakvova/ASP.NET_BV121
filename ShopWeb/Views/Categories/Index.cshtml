@@ -1,23 +1,35 @@
-﻿@{
-    Layout = null;
+﻿@model List<ShopWeb.Data.Entities.CategoryEntity>
+@{
+    //Layout = "_LayoutDefault";
 }
 
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Список категорій</title>
-    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css/style.css" rel="stylesheet" />
-</head>
-<body>
-    @await Html.PartialAsync("_Header")
+@section Styles {
 
-    <main>
-        <h1 class="text-center">Список категорій</h1>
-    </main>
+}
 
-    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<h1 class="text-center">Список категорій</h1>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Назва</th>
+                <th scope="col">Дата створення</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model)
+            {
+                <tr>
+                    <th scope="row">@cat.Id</th>
+                    <td>@cat.Name</td>
+                    <td>@cat.DateCreated.ToString("dd MMMM yyyy hh:mm:ss")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
