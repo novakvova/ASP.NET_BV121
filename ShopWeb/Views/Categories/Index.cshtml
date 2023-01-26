@@ -9,12 +9,14 @@
 
 <h1 class="text-center">Список категорій</h1>
 <div class="container">
+    <a href="@Url.Action("Create")" class="btn btn-success">Додати</a>
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Назва</th>
                 <th scope="col">Дата створення</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +26,7 @@
                     <th scope="row">@cat.Id</th>
                     <td>@cat.Name</td>
                     <td>@cat.DateCreated.ToString("dd MMMM yyyy hh:mm:ss")</td>
+                    <td><a asp-action="Edit" asp-route-id="@cat.Id">Змінить</a></td>
                 </tr>
             }
         </tbody>

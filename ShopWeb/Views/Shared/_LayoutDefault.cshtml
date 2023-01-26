@@ -12,7 +12,9 @@
     @await Html.PartialAsync("_Header")
 
     <main>
-        @RenderBody()
+        <div class="container">
+            @RenderBody()
+        </div>
     </main>
 
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
