@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShopWeb.Models.Categories
 {
@@ -9,5 +10,8 @@ namespace ShopWeb.Models.Categories
     {
         [Display(Name="Назва категорії")]
         public string Name { get; set; }
+        [Display(Name = "Фото категорії")]
+        public IFormFile UploadImage { get; set; }
+
     }
 }

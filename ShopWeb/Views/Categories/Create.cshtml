@@ -2,11 +2,23 @@
 
 <h1 class="text-center">Додати категорію</h1>
 <div class="container">
-    <form asp-action="Create" class="col-md-6 offset-md-3">
+    <form asp-action="Create" class="col-md-6 offset-md-3" enctype="multipart/form-data">
         <div class="mb-3">
             <label asp-for="Name" class="form-label"></label>
             @*<label for="name" class="form-label">Назва</label>*@
-            <input asp-for="Name" class="form-control" >
+            <input asp-for="Name" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="UploadImage" class="form-label">
+                <img src="~/images/select.png" 
+                     id="imagePreview"
+                     alt="Alternate Text" 
+                     width="150" 
+                     style="cursor: pointer" />
+
+            </label>
+            <input asp-for="UploadImage" type="file" class="form-control d-none">
         </div>
 
         <button type="submit" class="btn btn-primary">Додати</button>
@@ -16,3 +28,19 @@
 <div>
     <a asp-action="Index">Повернути до списку категорій</a>
 </div>
+
+@section Scripts {
+<script>
+    addEventListener("load", (event) => {
+        const UploadImage = document.getElementById("UploadImage");
+        const imagePreview = document.getElementById("imagePreview");
+        UploadImage.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            console.log("Select file", file);
+            var url = URL.createObjectURL(file);
+            imagePreview.src = url;
+        });
+        console.log("Load window");
+    });
+</script>
+}
