@@ -9,6 +9,7 @@ namespace ShopWeb.Models.Categories
     public class CategoryCreateViewModel
     {
         [Display(Name="Назва категорії")]
+        [Required(ErrorMessage ="Вкажіть назву")]
         public string Name { get; set; }
         [Display(Name = "Фото категорії")]
         public IFormFile UploadImage { get; set; }

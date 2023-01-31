@@ -1,6 +1,7 @@
 ﻿@model List<ShopWeb.Data.Entities.CategoryEntity>
 @{
     //Layout = "_LayoutDefault";
+   
      
 }
 
@@ -24,9 +25,10 @@
         <tbody>
             @foreach (var cat in Model)
             {
+                var image = string.IsNullOrEmpty(cat.Image) ? "select.png" : cat.Image;
                 <tr>
                     <th scope="row">@cat.Id</th>
-                    <td><img src="/images/@(cat.Image??"select.png")" alt="Alternate Text" width="50"/></td>
+                    <td><img src="/images/@image" alt="Alternate Text" width="50"/></td>
                     <td>@cat.Name</td>
                     <td>@cat.DateCreated.ToString("dd MMMM yyyy hh:mm:ss")</td>
                     <td><a asp-action="Edit" asp-route-id="@cat.Id">Змінить</a></td>

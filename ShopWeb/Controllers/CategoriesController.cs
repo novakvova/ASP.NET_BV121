@@ -42,6 +42,10 @@ namespace ShopWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateViewModel model)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
             string imageName = String.Empty;
             if(model.UploadImage!=null)
             {
