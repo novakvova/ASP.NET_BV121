@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using ShopWeb.Data;
+using ShopWeb.Mapper;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,6 +31,8 @@ namespace ShopWeb
                 opt.UseNpgsql(Configuration.GetConnectionString("MyDbConnection")));
 
             services.AddControllersWithViews();
+
+            services.AddAutoMapper(typeof(AppMapProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +60,9 @@ namespace ShopWeb
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.SeedData();
+            //SeederDB.SeedData(app);
 
             app.UseEndpoints(endpoints =>
             {

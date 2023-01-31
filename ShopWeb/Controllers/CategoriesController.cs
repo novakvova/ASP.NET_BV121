@@ -16,16 +16,6 @@ namespace ShopWeb.Controllers
         public CategoriesController(AppEFContext appEFContext)
         {
             _appEFContext = appEFContext;
-            if(!_appEFContext.Categories.Any())
-            {
-                CategoryEntity cat = new CategoryEntity
-                {
-                    Name = "Ноутбуки",
-                    DateCreated = DateTime.Now
-                };
-                _appEFContext.Categories.Add(cat);
-                _appEFContext.SaveChanges();
-            }
         }
         public IActionResult Index()
         {
