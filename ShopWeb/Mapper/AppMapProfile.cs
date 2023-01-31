@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ShopWeb.Data.Entities;
+using ShopWeb.Models.Helpers;
 using ShopWeb.Models.Products;
 
 namespace ShopWeb.Mapper
@@ -11,6 +12,8 @@ namespace ShopWeb.Mapper
             CreateMap<ProductEntity, ProductItemViewModel>()
                 .ForMember(p=>p.CategoryName, 
                     opt=> opt.MapFrom(entity=> entity.Category.Name));
+
+            CreateMap<CategoryEntity, SelectItemViewModel>();
         }
     }
 }

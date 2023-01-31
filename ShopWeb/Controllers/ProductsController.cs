@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopWeb.Data;
+using ShopWeb.Models.Helpers;
 using ShopWeb.Models.Products;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ShopWeb.Controllers
 {
@@ -31,6 +33,16 @@ namespace ShopWeb.Controllers
                 .AsQueryable()
                 .Include(x=>x.Category)
                 .Select(x => _mapper.Map<ProductItemViewModel>(x))
+                .ToList();
+
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ProductCreateViewModel model = new ProductCreateViewModel();
+            model.Categories = _appContext.Categories
+                .Select(x=>_mapper.Map<SelectItemViewModel>(x))
                 .ToList();
 
             return View(model);
