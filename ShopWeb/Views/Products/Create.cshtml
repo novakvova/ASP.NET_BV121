@@ -134,6 +134,17 @@
                     modal.hide();
                 });
             }
+        
+
+            let btnLeft = document.getElementById("btnLeft");
+            btnLeft.onclick = function () {
+                cropper.rotate(-90);
+            }
+
+            let btnRight = document.getElementById("btnRight");
+            btnRight.onclick = function () {
+                cropper.rotate(90);
+            }
         }
     </script>
 }
