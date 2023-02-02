@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShopWeb.Data.Entities
@@ -15,5 +17,6 @@ namespace ShopWeb.Data.Entities
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
         public virtual CategoryEntity Category { get; set; }
+        public virtual ICollection<ProductImageEntity> ProductImages { get; set; }
     }
 }
