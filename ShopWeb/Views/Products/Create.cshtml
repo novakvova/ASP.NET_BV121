@@ -9,6 +9,18 @@
             });
 }
 
+@section Styles {
+    <link href="~/lib/cropperjs/cropper.min.css" rel="stylesheet" />
+    <style>
+        .preview {
+            height: 100px !important;
+            width: 100px !important;
+            border: 1px solid silver;
+            overflow: hidden;
+        }
+    </style>
+}
+
 <h1 class="text-center">Додати продукт</h1>
 
 <div class="row">
@@ -37,6 +49,19 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="mb-3">
+                <div id="myImages">
+
+                </div>
+                <label for="files" 
+                    style="border:dotted; height: 100px; cursor: pointer;">
+                    Оберіть фото
+                </label>
+                <input type="file" id="files"
+                    
+                    accept="image/jpeg,image/png,image/jpg"
+                    style="display:none"/>
+            </div>
+            <div class="mb-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -47,3 +72,68 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@await Html.PartialAsync("_ModalCropper")
+
+@section Scripts {
+    <script src="~/lib/cropperjs/cropper.min.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script>
+        window.onload = function () {
+            //console.log("Початок роботи");
+            const myImages = document.getElementById("myImages");
+            const files = document.getElementById("files");
+
+            const imgPrev = document.getElementById("imgPrev");
+            const imgCropper = document.getElementById("imgCropper");
+            const cropper = new Cropper(imgCropper,{
+                aspectRatio: 1/1,
+                preview: imgPrev
+            });
+
+            files.onchange = function(e) {
+                const list = e.target.files;
+                //console.log("Select files", list);
+                if(list && list.length)
+                {
+                    for(let i = 0; i<list.length; i++)
+                    {
+                        const file = list[i];
+                        const url = URL.createObjectURL(file);
+                        const ModalCropper = document.getElementById("ModalCropper");
+                        var modal = bootstrap.Modal.getOrCreateInstance(ModalCropper);
+                        modal.show();
+                        cropper.replace(url);
+                    }
+                }
+                e.target.value="";
+            }
+
+            const btnAdd = document.getElementById("btnAdd");
+            btnAdd.onclick = function () {
+                cropper.getCroppedCanvas().toBlob(async (blob) => {
+                    console.log("Cropper image", blob);
+
+                    const formData = new FormData();
+                    formData.append("file", blob);
+                    const resp = await axios.post("/Products/upload", formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        }
+                    });
+                    console.log("resp server", resp);
+
+                    const model = resp.data;
+                    const url = `/images/${model.name}`;
+                    var data = `<img src ="${url}" height="100" />
+                                <input type="hidden" name="images" value="${model.id}" />`;
+
+                    myImages.innerHTML+=data;
+
+                    var modal = bootstrap.Modal.getOrCreateInstance(ModalCropper);
+                    modal.hide();
+                });
+            }
+        }
+    </script>
+}

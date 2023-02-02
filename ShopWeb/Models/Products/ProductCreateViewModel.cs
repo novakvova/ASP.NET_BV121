@@ -18,5 +18,6 @@ namespace ShopWeb.Models.Products
         [Required(ErrorMessage = "Вкажіть категорію")]
         public int CategoryId { get; set; }
         public List<SelectItemViewModel> Categories { get; set; }
+        public int[] Images { get; set; }
     }
 }
