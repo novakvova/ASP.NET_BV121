@@ -22,6 +22,7 @@ namespace ShopWeb.Models.Products
         public int CategoryId { get; set; }
         public List<SelectItemViewModel> Categories { get; set; }
         public int[] Images { get; set; }
+        public string[] RemoveImages { get; set; }
         public string[] OldImages { get; set; }
     }
 }

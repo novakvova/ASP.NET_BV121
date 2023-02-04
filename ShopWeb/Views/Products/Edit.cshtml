@@ -9,14 +9,14 @@
             });
 }
 @section Styles {
-        <link href="~/lib/cropperjs/cropper.min.css" rel="stylesheet" />
-        <style>
-            .preview {
-                height: 100px !important;
-                width: 100px !important;
-                border: 1px solid silver;
-                overflow: hidden;
-            }
+    <link href="~/lib/cropperjs/cropper.min.css" rel="stylesheet" />
+    <style>
+        .preview {
+            height: 100px !important;
+            width: 100px !important;
+            border: 1px solid silver;
+            overflow: hidden;
+        }
 
         .image {
             width: 180px;
@@ -35,7 +35,7 @@
         .image:hover .hideSection {
             display: block;
         }
-        </style>
+    </style>
 }
 
 <h1 class="text-center">Редагування</h1>
@@ -73,19 +73,16 @@
                 <div id="myImages">
                     @foreach (var name in Model.OldImages)
                     {
-
-                        @*<img src="/images/@name" height="100" data-name="@name" />*@
                         <div class="image">
                             <div class="hideSection">
-                                <button type="button" class="btn btn-warning" onclick="Edit(event)">Edit</button>
-                                <button type="button" class="btn btn-danger" data-image-delete>Delete</button>
+                                <button type="button" class="btn btn-danger" data-image-delete="@name">Delete</button>
                             </div>
                             <img src="/images/@name" height="180" />
-                            @*<input type="hidden" name="images" value="@(Model.Images[i])" />*@
                         </div>
                     }
                 </div>
-
+                <div id="removeImages">
+                </div>
 
                 <label for="files"
                        style="border:dotted; height: 100px; cursor: pointer;">
@@ -115,47 +112,19 @@
 
     <script>
         window.addEventListener("load", (event) => {
-
+            const removeImages = document.getElementById("removeImages");
             const Delete = (e) => {
-                const parent = e.target.parentElement.parentElement;
-                parent.parentElement.removeChild(parent);
+                var name = e.target.dataset.imageDelete;
+                e.target.closest(".image").remove();
+                var data = `<input type="hidden" name="removeImages" value="${name}" />`;
+                removeImages.innerHTML += data;
             }
             const buttons = document.querySelectorAll("[data-image-delete]");
             buttons.forEach((btn) => {
                 btn.addEventListener("click", Delete);
             });
-            //console.log("Loadn edit", matches);
-
-            
-
         });
 
-        
-        function Edit(e) {
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/jpeg, image/png, image/jpg';
-            const parent = e.target.parentElement.parentElement;
-            const image = parent.children[1];
-            const id = parent.children[2];
-
-            input.onchange = e => {
-                parent.parentElement.removeChild(parent);
-                const list = e.target.files;
-                if (list && list.length) {
-                    for (let i = 0; i < list.length; i++) {
-                        const file = list[i];
-                        const url = URL.createObjectURL(file);
-                        const ModalCropper = document.getElementById("ModalCropper");
-                        var modal = bootstrap.Modal.getOrCreateInstance(ModalCropper);
-                        modal.show();
-                        cropper.replace(url);
-                    }
-                }
-            }
-
-            input.click();
-        }
     </script>
 }
 

@@ -116,6 +116,71 @@ namespace ShopWeb.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public IActionResult Edit(ProductEditViewModel model)
+        {
+            bool isValide = true;
+            if (!ModelState.IsValid)
+                isValide = false;
+            decimal price;
+            if (!decimal.TryParse(model.Price, out price))
+            {
+                this.ModelState.AddModelError("Price", "Введіть число");
+                isValide = false;
+            }
+            else if (price < (decimal)0.01)
+            {
+                this.ModelState.AddModelError("Price", "Введіть число більше нуля");
+                isValide = false;
+            }
+
+            if (!isValide)
+            {
+                if (model.Categories == null)
+                {
+                    model.Categories = _appContext.Categories
+                    .Select(x => _mapper.Map<SelectItemViewModel>(x))
+                    .ToList();
+                }
+                return View(model);
+            }
+            if(model.RemoveImages!=null)
+            {
+                foreach (var img in model.RemoveImages)
+                {
+                    var del = _appContext.ProductImages
+                        .SingleOrDefault(x => x.Name == img);
+                    _appContext.Remove(del);
+                    _appContext.SaveChanges();
+                    string dirSaveImage = Path
+                        .Combine(Directory.GetCurrentDirectory(), "images", img);
+                    if (System.IO.File.Exists(dirSaveImage))
+                        System.IO.File.Delete(dirSaveImage);
+                }
+            }
+            
+            var editProduct = _appContext.Products
+                .SingleOrDefault(x => x.Id == model.Id);
+
+            editProduct.Name = model.Name;
+            editProduct.CategoryId = model.CategoryId;
+            editProduct.Description = model.Description;
+            editProduct.Price = price;
+            _appContext.SaveChanges();
+
+            if(model.Images!=null)
+            {
+                foreach (var img in model.Images)
+                {
+                    var item = _appContext.ProductImages.SingleOrDefault(x => x.Id == img);
+                    item.ProductId = model.Id;
+                    _appContext.SaveChanges();
+                }
+            }
+            
+            return RedirectToAction("Index");
+        }
+
 
         [HttpPost]
         public async Task<ProductImageItemViewModel> Upload(ProductImageCreateViewModel model)
