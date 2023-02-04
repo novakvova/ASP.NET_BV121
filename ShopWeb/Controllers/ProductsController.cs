@@ -100,7 +100,21 @@ namespace ShopWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = _appContext.Products
+                .Include(x=>x.ProductImages)
+                .AsQueryable()
+                .Where(x=>x.Id==id)
+                .Select(x=>_mapper.Map<ProductEditViewModel>(x))
+                .SingleOrDefault();
 
+            model.Categories = _appContext.Categories
+                                .Select(x => _mapper.Map<SelectItemViewModel>(x))
+                                .ToList();
+            return View(model);
+        }
 
 
         [HttpPost]
