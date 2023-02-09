@@ -29,6 +29,7 @@ namespace ShopWeb.Controllers
 
         public IActionResult Index()
         {
+            var name = User.Identity.Name;
             //var model = _appContext.Products.Select(x=> new ProductItemViewModel
             //{
             //    Id= x.Id,
