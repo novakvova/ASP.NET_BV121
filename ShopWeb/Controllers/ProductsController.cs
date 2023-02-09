@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShopWeb.Constants;
 using ShopWeb.Data;
 using ShopWeb.Data.Entities;
 using ShopWeb.Models.Helpers;
@@ -13,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace ShopWeb.Controllers
 {
+    [Authorize(Roles = Roles.Admin)]
     public class ProductsController : Controller
     {
         private readonly AppEFContext _appContext;
