@@ -14,8 +14,11 @@
                     @if (User.IsInRole(Roles.Admin))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Products" asp-action="Index">
-                                Продукти
+                            <a class="nav-link" 
+                                asp-controller="Home" 
+                                asp-action="Index"
+                                asp-area="Admin">
+                                Панель керування
                             </a>
                         </li>
                     }
