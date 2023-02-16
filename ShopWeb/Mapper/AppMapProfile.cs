@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ShopWeb.Data.Entities;
 using ShopWeb.Models.Helpers;
-using ShopWeb.Models.Products;
+using ShopWeb.Areas.Admin.Models.Products;
 using System.Linq;
 
 namespace ShopWeb.Mapper

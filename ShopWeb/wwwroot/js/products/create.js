@@ -33,7 +33,7 @@
 
             const formData = new FormData();
             formData.append("file", blob);
-            const resp = await axios.post("/Products/upload", formData,
+            const resp = await axios.post("/admin/Products/upload", formData,
                 {
                     headers: {
                         "Content-Type": "multipart/form-data"

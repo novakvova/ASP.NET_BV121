@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Bogus;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -38,24 +39,37 @@ namespace ShopWeb.Data
 
                 if(!context.Products.Any())
                 {
-                    ProductEntity product = new ProductEntity
+                    //ProductEntity product = new ProductEntity
+                    //{
+                    //    Name = "Піца Маргарита",
+                    //    DateCreated = DateTime.Now,
+                    //    Price = 220,
+                    //    CategoryId = 1,
+                    //};
+                    //context.Products.Add(product);
+                    //context.SaveChanges();
+                    //ProductEntity product2 = new ProductEntity
+                    //{
+                    //    Name = "Піца Папероні",
+                    //    DateCreated = DateTime.Now,
+                    //    Price = 190,
+                    //    CategoryId = 1,
+                    //};
+                    //context.Products.Add(product2);
+                    //context.SaveChanges();
+
+                    var testPorducts = new Faker<ProductEntity>("uk")
+                        .RuleFor(u => u.Name, (f, u) => f.Commerce.Product())
+                        .RuleFor(u => u.Price, (f, u) => decimal.Parse(f.Commerce.Price()))
+                        .RuleFor(u => u.DateCreated, (f, u) => DateTime.UtcNow)
+                        .RuleFor(u => u.Description, (f, u) => f.Commerce.ProductDescription())
+                        .RuleFor(u => u.CategoryId, (f, u) => 1);
+                    for(int i =0; i<1000; i++)
                     {
-                        Name = "Піца Маргарита",
-                        DateCreated = DateTime.Now,
-                        Price = 220,
-                        CategoryId = 1,
-                    };
-                    context.Products.Add(product);
-                    context.SaveChanges();
-                    ProductEntity product2 = new ProductEntity
-                    {
-                        Name = "Піца Папероні",
-                        DateCreated = DateTime.Now,
-                        Price = 190,
-                        CategoryId = 1,
-                    };
-                    context.Products.Add(product2);
-                    context.SaveChanges();
+                        var p = testPorducts.Generate();
+                        context.Products.Add(p);
+                        context.SaveChanges();
+                    }
                 }
             
                 if(!context.Roles.Any())

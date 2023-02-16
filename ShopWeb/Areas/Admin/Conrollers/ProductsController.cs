@@ -6,11 +6,15 @@ using ShopWeb.Constants;
 using ShopWeb.Data;
 using ShopWeb.Data.Entities;
 using ShopWeb.Models.Helpers;
-using ShopWeb.Models.Products;
+using ShopWeb.Areas.Admin.Models.Products;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ShopWeb.Helpers;
+using System.Drawing.Imaging;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace ShopWeb.Areas.Admin.Conrollers
 {
@@ -20,11 +24,13 @@ namespace ShopWeb.Areas.Admin.Conrollers
     {
         private readonly AppEFContext _appContext;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public ProductsController(AppEFContext appContext, IMapper mapper)
+        public ProductsController(AppEFContext appContext, IMapper mapper, IConfiguration configuration)
         {
             _appContext = appContext;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -193,19 +199,31 @@ namespace ShopWeb.Areas.Admin.Conrollers
             if (model.File != null)
             {
                 //string exp = Path.GetExtension(model.File.FileName);
+                var bmp = ImageWorker.IFormFileToBitmap(model.File);
+                
                 fileName = Path.GetRandomFileName() + ".jpg";
-                string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", fileName);
-                using (var stream = System.IO.File.Create(dirSaveImage))
+                string[] imageSizes = ((string)_configuration.GetValue<string>("ImageSizes")).Split(" ");
+                foreach(var imageSize in imageSizes)
                 {
-                    await model.File.CopyToAsync(stream);
+                    int size = int.Parse(imageSize);
+                    string dirSaveImage = Path.Combine(Directory.GetCurrentDirectory(), "images", $"{size}_{fileName}");
+
+                    var saveImage = ImageWorker.CompressImage(bmp, size, size, true, false);
+                    saveImage.Save(dirSaveImage, ImageFormat.Jpeg);
                 }
+
+                
+                //using (var stream = System.IO.File.Create(dirSaveImage))
+                //{
+                //    await model.File.CopyToAsync(stream);
+                //}
             }
             ProductImageEntity image = new ProductImageEntity();
             image.Name = fileName;
             image.DateCreated = DateTime.UtcNow;
             _appContext.ProductImages.Add(image);
             _appContext.SaveChanges();
-            return new ProductImageItemViewModel { Id = image.Id, Name = image.Name };
+            return new ProductImageItemViewModel { Id = image.Id, Name = "300_"+image.Name };
         }
     }
 }
