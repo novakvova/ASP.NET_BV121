@@ -33,7 +33,7 @@ namespace ShopWeb.Areas.Admin.Conrollers
             _configuration = configuration;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(ProductSearchViewModel search)
         {
             var name = User.Identity.Name;
             //var model = _appContext.Products.Select(x=> new ProductItemViewModel
@@ -43,8 +43,15 @@ namespace ShopWeb.Areas.Admin.Conrollers
             //    Price= x.Price,
             //    CategoryName=x.Category.Name
             //}).ToList();
-            var model = _appContext.Products
-                .AsQueryable()
+            ProductListViewModel model = new ProductListViewModel();
+            var query = _appContext.Products.AsQueryable();
+            if(!string.IsNullOrEmpty(search.Name))
+            {
+                query = query.Where(x=>x.Name.Contains(search.Name));
+            }
+            model.Count=query.Count();
+
+            model.Products = query
                 .Include(x => x.Category)
                 .Select(x => _mapper.Map<ProductItemViewModel>(x))
                 .ToList();

@@ -1,8 +1,9 @@
-﻿@model IEnumerable<ShopWeb.Areas.Admin.Models.Products.ProductItemViewModel>
+﻿@model ProductListViewModel
+@*IEnumerable<ShopWeb.Areas.Admin.Models.Products.ProductItemViewModel>*@
 
 @{
     ViewData["Title"] = "Index";
-    int i = 1;
+    
 }
 
 <h1 class="text-center">Список продуктів</h1>
@@ -12,47 +13,7 @@
 <p>
     <a asp-action="Create">Додати продукт</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                #
-               @* @Html.DisplayNameFor(model => model.Id)*@
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
 
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @(i++)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@await Html.PartialAsync("_ProductSearchItems", Model.Search)
+<h4>Усіх записів: @Model.Count</h4>
+@await Html.PartialAsync("_ListProductItems", Model.Products)
