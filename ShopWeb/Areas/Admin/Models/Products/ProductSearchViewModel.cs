@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using ShopWeb.Models.Helpers;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ShopWeb.Areas.Admin.Models.Products
 {
@@ -6,7 +8,13 @@ namespace ShopWeb.Areas.Admin.Models.Products
     {
         [DisplayName("Назва")]
         public string Name { get; set; }
+
         [DisplayName("Категорія")]
         public string CategoryId { get; set; }
+
+        [DisplayName("Відоразити")]
+        public int PageSize { get; set; } = 10;
+
+        public List<SelectItemViewModel> Categories { get; set; }
     }
 }

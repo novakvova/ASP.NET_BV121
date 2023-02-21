@@ -6,6 +6,7 @@ namespace ShopWeb.Areas.Admin.Models.Products
     {
         public List<ProductItemViewModel> Products { get; set; }
         public ProductSearchViewModel Search { get; set; }
+        public PaginationViewModel Pagination { get; set; }
 
         public int Count { get; set; }
     }

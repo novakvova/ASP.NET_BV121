@@ -9,7 +9,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using ShopWeb.Data;
 using ShopWeb.Data.Entities.Identity;
+using ShopWeb.Interfaces;
 using ShopWeb.Mapper;
+using ShopWeb.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,6 +57,7 @@ namespace ShopWeb
             services.AddControllersWithViews();
 
             services.AddAutoMapper(typeof(AppMapProfile));
+            services.AddTransient<IProductService, ProductService>();
 
             services.AddSession();
         }

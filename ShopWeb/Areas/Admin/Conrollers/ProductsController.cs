@@ -15,6 +15,7 @@ using ShopWeb.Helpers;
 using System.Drawing.Imaging;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
+using ShopWeb.Interfaces;
 
 namespace ShopWeb.Areas.Admin.Conrollers
 {
@@ -25,52 +26,35 @@ namespace ShopWeb.Areas.Admin.Conrollers
         private readonly AppEFContext _appContext;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IProductService _productService;
 
-        public ProductsController(AppEFContext appContext, IMapper mapper, IConfiguration configuration)
+        public ProductsController(AppEFContext appContext, IMapper mapper, 
+            IConfiguration configuration, IProductService productService)
         {
             _appContext = appContext;
             _mapper = mapper;
             _configuration = configuration;
+            _productService = productService;
         }
 
-        public IActionResult Index(ProductSearchViewModel search)
+        public async Task<IActionResult> Index(ProductSearchViewModel search)
         {
-            var name = User.Identity.Name;
-            //var model = _appContext.Products.Select(x=> new ProductItemViewModel
-            //{
-            //    Id= x.Id,
-            //    Name = x.Name,
-            //    Price= x.Price,
-            //    CategoryName=x.Category.Name
-            //}).ToList();
-            ProductListViewModel model = new ProductListViewModel();
-            var query = _appContext.Products.AsQueryable();
-            if(!string.IsNullOrEmpty(search.Name))
-            {
-                query = query.Where(x=>x.Name.Contains(search.Name));
-            }
-            model.Count=query.Count();
+            //var name = User.Identity.Name;
 
-            model.Products = query
-                .Include(x => x.Category)
-                .Select(x => _mapper.Map<ProductItemViewModel>(x))
-                .ToList();
-
+            var model = await _productService.SerchData(search);
             return View(model);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             ProductCreateViewModel model = new ProductCreateViewModel();
-            model.Categories = _appContext.Categories
-                .Select(x => _mapper.Map<SelectItemViewModel>(x))
-                .ToList();
+            model.Categories = await _productService.GetSelectCategoriesAsync();
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(ProductCreateViewModel model)
+        public async Task<IActionResult> Create(ProductCreateViewModel model)
         {
             bool isValide = true;
             if (!ModelState.IsValid)
@@ -91,9 +75,7 @@ namespace ShopWeb.Areas.Admin.Conrollers
             {
                 if (model.Categories == null)
                 {
-                    model.Categories = _appContext.Categories
-                    .Select(x => _mapper.Map<SelectItemViewModel>(x))
-                    .ToList();
+                    model.Categories = await _productService.GetSelectCategoriesAsync();
                 }
                 return View(model);
             }
