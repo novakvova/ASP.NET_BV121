@@ -1,66 +1,77 @@
-﻿@model PaginationViewModel
+﻿@model ProductListViewModel
 
 
 @{
-    
+
+    Dictionary<string, string> listParams = new Dictionary<string, string>();
+    var url = Url.Action("Index", new { page=1 });
 }
+
+
+
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-end">
         
-        <li class="page-item @(Model.CurrentPage==1 ? "disabled" : "")">
-            <a class="page-link" href="?page=@(Model.CurrentPage-1)" tabindex="-1" aria-disabled="true">Previous</a>
+        <li class="page-item @(Model.Pagination.CurrentPage==1 ? "disabled" : "")">
+            <a class="page-link" 
+                href="@Url.Action("Index", new {page = Model.Pagination.CurrentPage-1, name = Model.Search.Name})" 
+                tabindex="-1" 
+                aria-disabled="true">Previous</a>
         </li>
-        @for(int page=1;page<=Model.TotalPages;page++)
+        @for(int page=1;page<=Model.Pagination.TotalPages;page++)
         {
             if (page == 1)
             {
                 <li class="page-item">
-                    <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                    <a class="page-link @(Model.Pagination.CurrentPage==page ? "active" : "")"
+                        href="@Url.Action("Index", new {page = page, name = Model.Search.Name})">@(page)</a>
                 </li>
             }
 
-            if(Model.CurrentPage<=5)
+            if(Model.Pagination.CurrentPage<=5)
             {
-                if ((page!=1 && page <= 7) || page == Model.TotalPages)
+                if ((page!=1 && page <= 7) || page == Model.Pagination.TotalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                        <a class="page-link @(Model.Pagination.CurrentPage==page ? "active" : "")"
+                            href="@Url.Action("Index", new {page = page, name = Model.Search.Name})">@(page)</a>
                     </li>
                 }
 
-                if(page==8 && Model.TotalPages!=page)
+                if(page==8 && Model.Pagination.TotalPages!=page)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="?page=@(page)">...</a>
+                        <a class="page-link" href="@Url.Action("Index", new {page = page, name = Model.Search.Name})">...</a>
                     </li>
                 }
             }
-            else if(Model.CurrentPage>5)
+            else if(Model.Pagination.CurrentPage>5)
             {
-                int range = Model.TotalPages - Model.CurrentPage; //10 - 6 = 4, 10-7=3
+                int range = Model.Pagination.TotalPages - Model.Pagination.CurrentPage; //10 - 6 = 4, 10-7=3
 
                 //Якщо зліва
                 if(range<=4)
                 {
-                    int dot = Model.CurrentPage - (7 - range);
+                    int dot = Model.Pagination.CurrentPage - (7 - range);
                     if (page == dot)
                     {
                         <li class="page-item">
-                            <a class="page-link" href="?page=@(page)">...</a>
+                            <a class="page-link" href="@Url.Action("Index", new {page = page, name = Model.Search.Name})">...</a>
                         </li>
                     }
                     
-                    else if (Model.CurrentPage > Model.TotalPages - 5 && page > dot)
+                    else if (Model.Pagination.CurrentPage > Model.Pagination.TotalPages - 5 && page > dot)
                     {
                         <li class="page-item">
-                            <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                            <a class="page-link @(Model.Pagination.CurrentPage==page ? "active" : "")"
+                                href="@Url.Action("Index", new {page = page, name = Model.Search.Name})">@(page)</a>
                         </li>
                     }
                 }
                 else if(range>=5)
                 {
-                    int dotleft = Model.CurrentPage - 3;
-                    int dotright = Model.CurrentPage + 3;
+                    int dotleft = Model.Pagination.CurrentPage - 3;
+                    int dotright = Model.Pagination.CurrentPage + 3;
 
                     if (page == dotleft || page == dotright)
                     {
@@ -71,13 +82,15 @@
                     if (page > dotleft && page < dotright)
                     {
                          <li class="page-item">
-                            <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                            <a class="page-link @(Model.Pagination.CurrentPage==page ? "active" : "")"
+                                href="@Url.Action("Index", new {page = page, name = Model.Search.Name})">@(page)</a>
                         </li>
                     }
-                    if (page == Model.TotalPages)
+                    if (page == Model.Pagination.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                            <a class="page-link @(Model.Pagination.CurrentPage==page ? "active" : "")"
+                                href="@Url.Action("Index", new {page = page, name = Model.Search.Name})">@(page)</a>
                         </li>
                     }
                 }
@@ -85,8 +98,10 @@
             }
 
         }
-        <li class="page-item @(Model.CurrentPage==Model.TotalPages ? "disabled" : "")">
-            <a class="page-link" href="?page=@(Model.CurrentPage+1)" tabindex="-1" aria-disabled="true">Next</a>
+        <li class="page-item @(Model.Pagination.CurrentPage==Model.Pagination.TotalPages ? "disabled" : "")">
+            <a class="page-link" 
+                href="@Url.Action("Index", new {page = Model.Pagination.CurrentPage+1, name = Model.Search.Name})" 
+                tabindex="-1" aria-disabled="true">Next</a>
         </li>
     </ul>
 </nav>

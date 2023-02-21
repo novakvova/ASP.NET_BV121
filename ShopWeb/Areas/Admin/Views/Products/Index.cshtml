@@ -16,10 +16,10 @@
 
 @await Html.PartialAsync("_ProductSearchItems", Model.Search)
 
-@await Html.PartialAsync("_PaginationItems", Model.Pagination)
+@await Html.PartialAsync("_PaginationItems", Model)
 
 
 <h4>Усіх записів: @Model.Count</h4>
 @await Html.PartialAsync("_ListProductItems", Model.Products)
 
-@await Html.PartialAsync("_PaginationItems", Model.Pagination)
+@await Html.PartialAsync("_PaginationItems", Model)
