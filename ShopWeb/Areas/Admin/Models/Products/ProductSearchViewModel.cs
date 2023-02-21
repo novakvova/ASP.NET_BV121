@@ -15,6 +15,8 @@ namespace ShopWeb.Areas.Admin.Models.Products
         [DisplayName("Відоразити")]
         public int PageSize { get; set; } = 10;
 
+        public int? Page { get; set; }
+
         public List<SelectItemViewModel> Categories { get; set; }
     }
 }

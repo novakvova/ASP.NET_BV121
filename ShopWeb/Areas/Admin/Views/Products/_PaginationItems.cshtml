@@ -1,16 +1,92 @@
 ﻿@model PaginationViewModel
 
 
+@{
+    
+}
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-end">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+        
+        <li class="page-item @(Model.CurrentPage==1 ? "disabled" : "")">
+            <a class="page-link" href="?page=@(Model.CurrentPage-1)" tabindex="-1" aria-disabled="true">Previous</a>
         </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
+        @for(int page=1;page<=Model.TotalPages;page++)
+        {
+            if (page == 1)
+            {
+                <li class="page-item">
+                    <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                </li>
+            }
+
+            if(Model.CurrentPage<=5)
+            {
+                if ((page!=1 && page <= 7) || page == Model.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                    </li>
+                }
+
+                if(page==8 && Model.TotalPages!=page)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?page=@(page)">...</a>
+                    </li>
+                }
+            }
+            else if(Model.CurrentPage>5)
+            {
+                int range = Model.TotalPages - Model.CurrentPage; //10 - 6 = 4, 10-7=3
+
+                //Якщо зліва
+                if(range<=4)
+                {
+                    int dot = Model.CurrentPage - (7 - range);
+                    if (page == dot)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(page)">...</a>
+                        </li>
+                    }
+                    
+                    else if (Model.CurrentPage > Model.TotalPages - 5 && page > dot)
+                    {
+                        <li class="page-item">
+                            <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                        </li>
+                    }
+                }
+                else if(range>=5)
+                {
+                    int dotleft = Model.CurrentPage - 3;
+                    int dotright = Model.CurrentPage + 3;
+
+                    if (page == dotleft || page == dotright)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="?page=@(page)">...</a>
+                        </li>
+                    }
+                    if (page > dotleft && page < dotright)
+                    {
+                         <li class="page-item">
+                            <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                        </li>
+                    }
+                    if (page == Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link @(Model.CurrentPage==page ? "active" : "")" href="?page=@(page)">@(page)</a>
+                        </li>
+                    }
+                }
+
+            }
+
+        }
+        <li class="page-item @(Model.CurrentPage==Model.TotalPages ? "disabled" : "")">
+            <a class="page-link" href="?page=@(Model.CurrentPage+1)" tabindex="-1" aria-disabled="true">Next</a>
         </li>
     </ul>
 </nav>

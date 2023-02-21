@@ -43,7 +43,7 @@ namespace ShopWeb.Services
             model.Count = query.Count();
 
             PaginationViewModel pagination = new PaginationViewModel();
-            pagination.CurrentPage = 1;
+            pagination.CurrentPage = search.Page ?? 1;
             pagination.PageSize = search.PageSize;
             pagination.TotalItems = query.Count();
 
